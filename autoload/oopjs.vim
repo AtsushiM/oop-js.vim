@@ -80,7 +80,7 @@ function! oopjs#dotCheck(errors)
     let linenum = 1
 
     for e in js
-        if len(split(e, '\.', 1)) > g:oopjs_dotlimitnum
+        if len(split(e, '\.', 1)) - 1 > g:oopjs_dotlimitnum
             let errors = add(errors, expand('%').':'.linenum.':dot <= '.g:oopjs_dotlimitnum)
         endif
 
