@@ -12,25 +12,29 @@ endif
 if !exists("g:oopjs_dotlimitnum")
     let g:oopjs_dotlimitnum = 3
 endif
-if !exists("g:oopjs_functionlimitnum")
-    let g:oopjs_functionlimitnum = 5
+if !exists("g:oopjs_anonymousfunctionlimitnum")
+    let g:oopjs_anonymousfunctionlimitnum = 5
 endif
 if !exists("g:oopjs_varlimitnum")
     let g:oopjs_varlimitnum = 5
 endif
 
+let s:error_open = 0
 function! oopjs#Check()
     let errors = []
 
     call oopjs#lineCheck(errors)
     call oopjs#varCheck(errors)
     call oopjs#dotCheck(errors)
-    call oopjs#functionCheck(errors)
+    call oopjs#anonymousfunctionCheck(errors)
 
     if errors != []
         setlocal errorformat=%f:%l:%m
         cgetexpr join(errors, "\n")
         copen
+        let s:error_open = 1
+    elseif s:error_open == 1
+        cclose
     endif
 endfunction
 
@@ -54,18 +58,18 @@ function! oopjs#varCheck(errors)
     endfor
 endfunction
 
-function! oopjs#functionCheck(errors)
+function! oopjs#anonymousfunctionCheck(errors)
     let errors = a:errors
     let js = readfile(expand('%'))
     let linenum = 1
     let cnt = 0
 
     for e in js
-        if matchlist(e, '\vfunction(.{-})\(') != []
+        if matchlist(e, '\vfunction(\s{-})\(') != []
             let cnt = cnt + 1
 
-            if cnt > g:oopjs_functionlimitnum
-                let errors = add(errors, expand('%').':'.linenum.':functin <= '.g:oopjs_functionlimitnum)
+            if cnt > g:oopjs_anonymousfunctionlimitnum
+                let errors = add(errors, expand('%').':'.linenum.':anonymous_function <= '.g:oopjs_anonymousfunctionlimitnum)
                 break
             endif
         endif
