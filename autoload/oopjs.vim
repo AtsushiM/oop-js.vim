@@ -44,8 +44,11 @@ function! oopjs#Check()
         cgetexpr join(errors, "\n")
         copen
         let s:error_open = 1
+
+        return 0
     elseif s:error_open == 1
         cclose
+        let s:error_open = 0
     endif
 endfunction
 
