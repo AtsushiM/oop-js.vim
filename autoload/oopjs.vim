@@ -61,11 +61,11 @@ function! oopjs#functionCheck(errors)
     let cnt = 0
 
     for e in js
-        if matchlist(e, '\vfunction(\s*)\(') != []
+        if matchlist(e, '\vfunction(.{-})\(') != []
             let cnt = cnt + 1
 
             if cnt > g:oopjs_functionlimitnum
-                let errors = add(errors, expand('%').':'.linenum.':ramda_functin <= '.g:oopjs_functionlimitnum)
+                let errors = add(errors, expand('%').':'.linenum.':functin <= '.g:oopjs_functionlimitnum)
                 break
             endif
         endif
