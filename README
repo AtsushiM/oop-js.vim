@@ -20,7 +20,8 @@ JavaScriptでのコーディング時、厳しい制約を課すことで
 
 " 設定
 " 自動チェック(拡張子がjsのファイルを保存した場合チェックを自動実行)
-let g:oopjs_autocheck = 0
+let g:oopjs_autocheck = 0 "自動実行無し
+let g:oopjs_autocheck = 1 "自動実行有り
 
 " 1ファイルの限界行数
 let g:oopjs_linelimitnum = 50
