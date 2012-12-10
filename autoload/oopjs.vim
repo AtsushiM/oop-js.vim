@@ -6,6 +6,9 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+if !exists("g:oopjs_ignorecheckfile")
+    let g:oopjs_ignorecheckfile = ['min\.js', 'combine\.js', 'lib\/.\+\.js']
+endif
 if !exists("g:oopjs_linelimitnum")
     let g:oopjs_linelimitnum = 50
 endif
@@ -21,6 +24,14 @@ endif
 
 let s:error_open = 0
 function! oopjs#Check()
+    let jspath = expand('%:p')
+
+    for e in g:oopjs_ignorecheckfile
+        if matchlist(jspath, e) != []
+            return 0
+        endif
+    endfor
+
     let errors = []
 
     call oopjs#lineCheck(errors)

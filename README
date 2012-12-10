@@ -23,6 +23,9 @@ JavaScriptでのコーディング時、厳しい制約を課すことで
 let g:oopjs_autocheck = 0 "自動実行無し
 let g:oopjs_autocheck = 1 "自動実行有り
 
+" 無視するファイル名を指定（正規表現OK）
+let g:oopjs_ignorecheckfile = ['min\.js', 'combine\.js', 'lib\/.\+\.js']
+
 " 1ファイルの限界行数
 let g:oopjs_linelimitnum = 50
 
@@ -30,7 +33,7 @@ let g:oopjs_linelimitnum = 50
 let g:oopjs_dotlimitnum = 3
 
 " 1ファイル内の無名関数の限界数
-let g:oopjs_functionlimitnum = 5
+let g:oopjs_anonymousfunctionlimitnum = 5
 
 " 1ファイル内のvar宣言の限界数
 let g:oopjs_varlimitnum = 5
