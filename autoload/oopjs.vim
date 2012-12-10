@@ -93,7 +93,7 @@ function! oopjs#lineCheck(errors)
     let linenum = line('$')
 
     if linenum > g:oopjs_linelimitnum
-        let errors = add(errors, expand('%').':'.linenum.':'.'over '.g:oopjs_linelimitnum.'lines.')
+        let errors = add(errors, expand('%').':'.linenum.':'.'line <= '.g:oopjs_linelimitnum)
     endif
 endfunction
 
