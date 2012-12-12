@@ -19,7 +19,7 @@ if !exists("g:oopjs_dotlimitnum")
     let g:oopjs_dotlimitnum = 3
 endif
 if !exists("g:oopjs_iflimitnum")
-    let g:oopjs_iflimitnum = 10
+    let g:oopjs_iflimitnum = 5
 endif
 if !exists("g:oopjs_elselimitnum")
     let g:oopjs_elselimitnum = 1

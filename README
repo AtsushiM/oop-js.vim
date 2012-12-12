@@ -11,9 +11,13 @@ JavaScriptでのコーディング時、厳しい制約を課すことで
 デフォルトでのチェック内容は
 
 ・1ファイル50行以内
-・1行で使える.(ドット)は3つ以内
-・1ファイル内の無名関数は5つ以内
-・1ファイル内でvar宣言は5つ以内
+・1ファイル内でvar宣言は5個
+・1行で使える.(ドット)は3個
+・1ファイル中のifは5個
+・1ファイル中のelseは1個
+・1ファイル中のswitchは1個
+・1ファイル内の無名関数は5個
+・1ファイル内の名前付き関数は5個
 
 となっています。
 
@@ -29,11 +33,23 @@ let g:oopjs_ignorecheckfile = ['min\.js', 'combine\.js', 'lib\/.\+\.js']
 " 1ファイルの限界行数
 let g:oopjs_linelimitnum = 50
 
+" 1ファイル内のvar宣言の限界数
+let g:oopjs_varlimitnum = 5
+
 " 1行で使える.(ドット)の数
 let g:oopjs_dotlimitnum = 3
 
-" 1ファイル内の無名関数の限界数
+" 1ファイル中で使えるifの個数
+let g:oopjs_iflimitnum = 5
+
+" 1ファイル中で使えるelseの個数
+let g:oopjs_elselimitnum = 1
+
+" 1ファイル中で使えるswitchの個数
+let g:oopjs_switchlimitnum = 1
+
+" 1ファイル内の無名関数の個数
 let g:oopjs_anonymousfunctionlimitnum = 5
 
-" 1ファイル内のvar宣言の限界数
-let g:oopjs_varlimitnum = 5
+" 1ファイル中の名前付き関数の個数
+let g:oopjs_namedfunctionlimitnum = 5
