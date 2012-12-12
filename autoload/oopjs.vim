@@ -12,14 +12,26 @@ endif
 if !exists("g:oopjs_linelimitnum")
     let g:oopjs_linelimitnum = 50
 endif
+if !exists("g:oopjs_varlimitnum")
+    let g:oopjs_varlimitnum = 5
+endif
 if !exists("g:oopjs_dotlimitnum")
     let g:oopjs_dotlimitnum = 3
+endif
+if !exists("g:oopjs_iflimitnum")
+    let g:oopjs_iflimitnum = 10
+endif
+if !exists("g:oopjs_elselimitnum")
+    let g:oopjs_elselimitnum = 1
+endif
+if !exists("g:oopjs_switchlimitnum")
+    let g:oopjs_switchlimitnum = 1
 endif
 if !exists("g:oopjs_anonymousfunctionlimitnum")
     let g:oopjs_anonymousfunctionlimitnum = 5
 endif
-if !exists("g:oopjs_varlimitnum")
-    let g:oopjs_varlimitnum = 5
+if !exists("g:oopjs_namedfunctionlimitnum")
+    let g:oopjs_namedfunctionlimitnum = 5
 endif
 
 let s:error_open = 0
@@ -37,7 +49,11 @@ function! oopjs#Check()
     call oopjs#lineCheck(errors)
     call oopjs#varCheck(errors)
     call oopjs#dotCheck(errors)
+    call oopjs#ifCheck(errors)
+    call oopjs#elseCheck(errors)
+    call oopjs#switchCheck(errors)
     call oopjs#anonymousfunctionCheck(errors)
+    call oopjs#namedfunctionCheck(errors)
 
     if errors != []
         setlocal errorformat=%f:%l:%m
@@ -84,6 +100,84 @@ function! oopjs#anonymousfunctionCheck(errors)
 
             if cnt > g:oopjs_anonymousfunctionlimitnum
                 let errors = add(errors, expand('%').':'.linenum.':anonymous_function <= '.g:oopjs_anonymousfunctionlimitnum)
+                break
+            endif
+        endif
+
+        let linenum = linenum + 1
+    endfor
+endfunction
+
+function! oopjs#namedfunctionCheck(errors)
+    let errors = a:errors
+    let js = readfile(expand('%'))
+    let linenum = 1
+    let cnt = 0
+
+    for e in js
+        if matchlist(e, '\vfunction\s(.+)\(') != []
+            let cnt = cnt + 1
+
+            if cnt > g:oopjs_namedfunctionlimitnum
+                let errors = add(errors, expand('%').':'.linenum.':named_function <= '.g:oopjs_namedfunctionlimitnum)
+                break
+            endif
+        endif
+
+        let linenum = linenum + 1
+    endfor
+endfunction
+
+function! oopjs#ifCheck(errors)
+    let errors = a:errors
+    let js = readfile(expand('%'))
+    let linenum = 1
+    let cnt = 0
+
+    for e in js
+        if matchlist(e, '\vif(\s*)\(') != []
+            let cnt = cnt + 1
+
+            if cnt > g:oopjs_iflimitnum
+                let errors = add(errors, expand('%').':'.linenum.':if <= '.g:oopjs_iflimitnum)
+                break
+            endif
+        endif
+
+        let linenum = linenum + 1
+    endfor
+endfunction
+function! oopjs#elseCheck(errors)
+    let errors = a:errors
+    let js = readfile(expand('%'))
+    let linenum = 1
+    let cnt = 0
+
+    for e in js
+        if matchlist(e, '\velse(.*)(\(|\{)') != []
+            let cnt = cnt + 1
+
+            if cnt > g:oopjs_elselimitnum
+                let errors = add(errors, expand('%').':'.linenum.':else <= '.g:oopjs_elselimitnum)
+                break
+            endif
+        endif
+
+        let linenum = linenum + 1
+    endfor
+endfunction
+function! oopjs#switchCheck(errors)
+    let errors = a:errors
+    let js = readfile(expand('%'))
+    let linenum = 1
+    let cnt = 0
+
+    for e in js
+        if matchlist(e, '\vswitch(\s*)\(') != []
+            let cnt = cnt + 1
+
+            if cnt > g:oopjs_switchlimitnum
+                let errors = add(errors, expand('%').':'.linenum.':switch <= '.g:oopjs_switchlimitnum)
                 break
             endif
         endif
