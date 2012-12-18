@@ -7,7 +7,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 if !exists("g:oopjs_ignorecheckfile")
-    let g:oopjs_ignorecheckfile = ['min\.js', 'combine\.js', 'lib\/.\+\.js']
+    let g:oopjs_ignorecheckfile = ['test\.js', 'min\.js', 'combine\.js', 'lib\/.\+\.js']
 endif
 if !exists("g:oopjs_linelimitnum")
     let g:oopjs_linelimitnum = 50
@@ -26,6 +26,15 @@ if !exists("g:oopjs_elselimitnum")
 endif
 if !exists("g:oopjs_switchlimitnum")
     let g:oopjs_switchlimitnum = 1
+endif
+if !exists("g:oopjs_forlimitnum")
+    let g:oopjs_forlimitnum = 3
+endif
+if !exists("g:oopjs_whilelimitnum")
+    let g:oopjs_whilelimitnum = 3
+endif
+if !exists("g:oopjs_dolimitnum")
+    let g:oopjs_dolimitnum = 1
 endif
 if !exists("g:oopjs_anonymousfunctionlimitnum")
     let g:oopjs_anonymousfunctionlimitnum = 5
@@ -52,6 +61,9 @@ function! oopjs#Check()
     call oopjs#ifCheck(errors)
     call oopjs#elseCheck(errors)
     call oopjs#switchCheck(errors)
+    call oopjs#forCheck(errors)
+    call oopjs#whileCheck(errors)
+    call oopjs#doCheck(errors)
     call oopjs#anonymousfunctionCheck(errors)
     call oopjs#namedfunctionCheck(errors)
 
@@ -178,6 +190,63 @@ function! oopjs#switchCheck(errors)
 
             if cnt > g:oopjs_switchlimitnum
                 let errors = add(errors, expand('%').':'.linenum.':switch <= '.g:oopjs_switchlimitnum)
+                break
+            endif
+        endif
+
+        let linenum = linenum + 1
+    endfor
+endfunction
+function! oopjs#forCheck(errors)
+    let errors = a:errors
+    let js = readfile(expand('%'))
+    let linenum = 1
+    let cnt = 0
+
+    for e in js
+        if matchlist(e, '\vfor(\s*)\(') != []
+            let cnt = cnt + 1
+
+            if cnt > g:oopjs_forlimitnum
+                let errors = add(errors, expand('%').':'.linenum.':for <= '.g:oopjs_forlimitnum)
+                break
+            endif
+        endif
+
+        let linenum = linenum + 1
+    endfor
+endfunction
+function! oopjs#whileCheck(errors)
+    let errors = a:errors
+    let js = readfile(expand('%'))
+    let linenum = 1
+    let cnt = 0
+
+    for e in js
+        if matchlist(e, '\vwhile(\s*)\(') != []
+            let cnt = cnt + 1
+
+            if cnt > g:oopjs_whilelimitnum
+                let errors = add(errors, expand('%').':'.linenum.':while <= '.g:oopjs_whilelimitnum)
+                break
+            endif
+        endif
+
+        let linenum = linenum + 1
+    endfor
+endfunction
+function! oopjs#doCheck(errors)
+    let errors = a:errors
+    let js = readfile(expand('%'))
+    let linenum = 1
+    let cnt = 0
+
+    for e in js
+        if matchlist(e, '\vdo(\s*)\{') != []
+            let cnt = cnt + 1
+
+            if cnt > g:oopjs_dolimitnum
+                let errors = add(errors, expand('%').':'.linenum.':do <= '.g:oopjs_dolimitnum)
                 break
             endif
         endif

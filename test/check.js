@@ -83,7 +83,15 @@ for () {
 }
 for () {
 }
+for () {
+}
+for () {
+}
 
+while () {
+}
+while () {
+}
 while () {
 }
 while () {
@@ -91,4 +99,3 @@ while () {
 
 do {
 }
-while ();
